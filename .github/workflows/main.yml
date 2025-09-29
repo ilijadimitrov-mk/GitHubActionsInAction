@@ -8,7 +8,7 @@ on:
 
 jobs:
   MyFirstJob:
-    runs-on: ubuntu-latest:
+    runs-on: ubuntu-latest
 
     steps:
       - run echo "Hello World!"
