@@ -9,14 +9,21 @@ on:
 jobs:
   MyFirstJob:
     runs-on: ubuntu-latest
-
     steps:
       - name: Hello
         run: echo "Hello World!"
 
+  MyFirstJob1:
+    runs-on: ubuntu-latest
+    needs: MyFirstJob
+    steps:
       - name: Checkout
         uses: actions/checkout@v5.0.0
 
+  MyFirstJob2:
+    runs-on: ubuntu-latest
+    needs: MyFirstJob1
+    steps:
       - name: List files in repo
         run: |
           echo "The repository ${{ github.repository }} contains the following files:"
