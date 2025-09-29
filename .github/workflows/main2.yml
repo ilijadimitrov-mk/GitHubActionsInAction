@@ -1,0 +1,58 @@
+name: Test Workflow with Custom Inputs
+
+on:
+  workflow_dispatch:
+    inputs:
+      homedrive:
+        description: 'The home drive on the machine'
+        required: true
+      logLevel:
+        description: 'Log level'
+        required: false
+        default: 'warning'
+        type: choice
+        options:
+          - info
+          - warning
+          - debug
+      tag:
+        description: 'Apply tag after successful test run'
+        required: true
+        type: boolean
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        type: string
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Show input values
+        run: |
+          echo "Home drive: ${{ github.event.inputs.homedrive }}"
+          echo "Log level: ${{ github.event.inputs.logLevel }}"
+          echo "Apply tag: ${{ github.event.inputs.tag }}"
+          echo "Environment: ${{ github.event.inputs.environment }}"
+
+      - name: Run a script using inputs
+        run: |
+          HOMEDRIVE="${{ github.event.inputs.homedrive }}"
+          LOG_LEVEL="${{ github.event.inputs.logLevel }}"
+          TAG="${{ github.event.inputs.tag }}"
+          ENV="${{ github.event.inputs.environment }}"
+
+          echo "Starting tests on $ENV using $HOMEDRIVE..."
+          echo "Log level set to $LOG_LEVEL"
+          if [ "$TAG" = "true" ]; then
+            echo "Tag will be applied after test run"
+          else
+            echo "No tag will be applied"
+          fi
+
+          # Example: run a test script
+          # ./run_tests.sh --home "$HOMEDRIVE" --log "$LOG_LEVEL" --env "$ENV"
+
